@@ -11,7 +11,7 @@
             />
         </ol>
         <div v-if="top.length > 1" class="top">
-            <h3 v-for="player in top">#{{player.place}} {{player.name}}</h3>
+            <h3 v-for="player in top" :key="player.name">#{{player.place}} {{player.name}}</h3>
         </div>
         <Order v-if="players.length > 1" class="order"/>
         <div v-if="players.length > 0" class="answer">
