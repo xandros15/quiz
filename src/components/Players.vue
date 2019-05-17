@@ -15,7 +15,7 @@
         </div>
         <Order v-if="players.length > 1" class="order"/>
         <div v-if="players.length > 0" class="answer">
-            <Btn color="blue" @click="pass">pass</Btn>
+            <Btn v-if="!takeover" color="blue" @click="pass">pass</Btn>
             <Btn color="green" @click="correct">Correct</Btn>
             <Btn color="red" @click="incorrect">Incorrect</Btn>
         </div>
