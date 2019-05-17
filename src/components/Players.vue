@@ -1,6 +1,7 @@
 <template>
     <div id="app">
-        <ol class="left-aside panel">
+        <h2 v-if="answering" class="panel answering">Answering Player: {{answering.name}}</h2>
+        <ol class="players panel">
             <Player v-for="(player, index) in playersSorted"
                     :isCurrent="current && player.name === current.name"
                     :isTakeover="takeover && player.name === takeover.name"
@@ -9,13 +10,13 @@
                     :index="index"
             />
         </ol>
-        <Order v-if="players.length > 1" class="bottom-aside-1"/>
-        <div v-if="players.length > 0" class="bottom-aside-2">
+        <Order v-if="players.length > 1" class="order"/>
+        <div v-if="players.length > 0" class="answer">
             <Btn color="blue" @click="pass">pass</Btn>
             <Btn color="green" @click="correct">Correct</Btn>
             <Btn color="red" @click="incorrect">Incorrect</Btn>
         </div>
-        <div class="panel bottom-aside-3">
+        <div class="panel new-player">
             <label>
                 New player: <input @keyup.enter="createPlayer" v-model="name" type="text">
             </label>
@@ -24,9 +25,9 @@
 </template>
 
 <script>
+  import Btn from './Btn'
   import Order from './Order'
   import Player from './Player'
-  import Btn from './Btn';
 
   export default {
     components: {Player, Order, Btn},
@@ -53,10 +54,10 @@
       },
     },
     computed: {
-      takeover(){
+      takeover () {
         return this.$store.state.takeover
       },
-      current(){
+      current () {
         return this.$store.state.current
       },
       players () {
@@ -67,26 +68,29 @@
       },
       top () {
         return this.$store.getters.top
-      }
+      },
+      answering () {
+        return this.$store.getters.answering
+      },
     }
   }
 </script>
 
 <style scoped>
-    .left-aside {
-        grid-area: left;
+    .players {
+        grid-area: players;
     }
-    .right-aside {
-        grid-area: right;
+    .order {
+        grid-area: order;
     }
-    .bottom-aside-1 {
-        grid-area: bottom1;
+    .answer {
+        grid-area: answer;
     }
-    .bottom-aside-2 {
-        grid-area: bottom2;
+    .answering {
+        grid-area: answering;
     }
-    .bottom-aside-3 {
-        grid-area: bottom3;
+    .new-player {
+        grid-area: new-player;
     }
     #app {
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -97,10 +101,11 @@
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-template-rows: auto;
         grid-template-areas:
-                "bottom1 bottom1 . ."
-                "bottom2 bottom2 . ."
-                "left left right right"
-                "bottom3 . . .";
+        "answering answering . ."
+        "answer answer . ."
+        "order order . ."
+        "players players . ."
+        "new-player . . .";
     }
     .panel {
         margin-bottom: 1rem;

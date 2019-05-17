@@ -56,7 +56,12 @@ const top = (state) => {
   return top
 }
 
+const answering = state => {
+  return state.takeover || state.current || null
+}
+
 export default {
   top,
   playersSorted,
+  answering,
 }
