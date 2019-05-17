@@ -80,7 +80,16 @@ const toggleTakeover = ({commit, state}, name) => {
   }
 }
 
+const setScore = ({commit}, {name, score}) => {
+  commit('setScore', {name, score})
+}
+const setHp = ({commit}, {name, hp}) => {
+  commit('setHp', {name, hp})
+}
+
 export default {
+  setScore,
+  setHp,
   toggleTakeover,
   pass,
   correct,

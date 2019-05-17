@@ -44,7 +44,18 @@ const removeTakeover = state => {
   state.takeover = null
 }
 
+const setHp = (state, {name, hp}) => {
+  const player = state.players.find(i => i.name === name)
+  player.hp = parseFloat(hp)
+}
+const setScore = (state, {name, score}) => {
+  const player = state.players.find(i => i.name === name)
+  player.score = parseFloat(score)
+}
+
 export default {
+  setHp,
+  setScore,
   takeover,
   removeTakeover,
   removePlayer,

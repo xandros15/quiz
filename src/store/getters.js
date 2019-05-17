@@ -60,7 +60,12 @@ const answering = state => {
   return state.takeover || state.current || null
 }
 
+const isGameOrder = state => {
+  return state.order === 'game'
+}
+
 export default {
+  isGameOrder,
   top,
   playersSorted,
   answering,

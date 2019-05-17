@@ -1,12 +1,53 @@
 <template>
     <li :style="style">
         <h3>
-            <span :class="{ 'not-allowed' : isCurrent }" class="clickable" @click="toggleTakeover">
-            <span class="meta">{{player.name}}</span>
-            <span class="meta">Score: {{player.score}}</span>
-            <span class="meta">HP: {{player.hp}}</span>
+            <span class="meta clickable" :class="{ 'not-allowed' : isCurrent }" @click="toggleTakeover">
+                {{player.name}}
             </span>
-            <span class="meta clickable" @click="removePlayer">❌</span>
+            <span class="meta">
+                <span class="clickable" :class="{ 'not-allowed' : isCurrent }" @click="toggleTakeover">
+                    Score:
+            </span>
+                <span v-if="!editingScore"
+                      class="clickable"
+                      @click="changeScore"
+                      :class="{ 'not-allowed': !isGameOrder }"
+                >
+                    {{player.score}}
+                </span>
+                <input v-else title="score"
+                       class="input-edit"
+                       @keyup.enter="endChangeScore"
+                       @blur="endChangeScore"
+                       type="number"
+                       v-model="editCache"
+                       v-focus
+                />
+            </span>
+            <span class="meta">
+                <span class="clickable" :class="{ 'not-allowed' : isCurrent }" @click="toggleTakeover">
+                    HP:
+                </span>
+                <span v-if="!editingHp"
+                      class="clickable"
+                      @click="changeHp"
+                      :class="{ 'not-allowed': !isGameOrder }"
+                >
+                    {{player.hp}}
+                </span>
+                <input v-else
+                       title="HP"
+                       class="input-edit"
+                       @keyup.enter="endChangeHp"
+                       @blur="endChangeHp"
+                       type="number"
+                       v-model="editCache"
+                       v-focus
+                />
+            </span>
+            <span class="meta clickable" @click="removePlayer">
+                ❌
+            </span>
         </h3>
     </li>
 </template>
@@ -23,7 +64,19 @@
       }
     },
     data () {
-      return {name: this.player.name,}
+      return {
+        name: this.player.name,
+        editCache: '',
+        editingScore: false,
+        editingHp: false,
+      }
+    },
+    directives: {
+      focus: {
+        inserted (el) {
+          el.focus()
+        }
+      }
     },
     methods: {
       toggleTakeover () {
@@ -32,8 +85,43 @@
       removePlayer () {
         this.$store.dispatch('removePlayer', this.name)
       },
+      changeScore () {
+        if (this.isGameOrder) {
+          this.editCache = this.player.score
+          this.editingScore = true
+        }
+      },
+      changeHp () {
+        if (this.isGameOrder) {
+          this.editCache = this.player.hp
+          this.editingHp = true
+        }
+      },
+      endChangeHp () {
+        this.editingHp = false
+        this.$store.dispatch('setHp', {
+          name: this.name,
+          hp: this.editCacheNumber
+        })
+      },
+      endChangeScore () {
+        this.editingScore = false
+        this.$store.dispatch('setScore', {
+          name: this.name,
+          score: this.editCacheNumber
+        })
+      },
     },
     computed: {
+      isGameOrder () {
+        return this.$store.getters.isGameOrder
+      },
+      editCacheNumber () {
+        if (typeof this.editCache === 'string') {
+          return parseFloat(this.editCache)
+        }
+        return this.editCache
+      },
       style () {
         if (this.isCurrent) {
           return 'color: #232aae'
@@ -60,5 +148,9 @@
     }
     .clickable.not-allowed {
         cursor: not-allowed;
+    }
+    .input-edit {
+        font-size: 1rem;
+        max-width: 3rem;
     }
 </style>
