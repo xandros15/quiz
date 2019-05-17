@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <h2 v-if="answering" class="panel answering">Answering Player: {{answering.name}}</h2>
-        <ol class="players panel">
+        <ol v-if="players.length > 0" class="players panel">
             <Player v-for="(player, index) in playersSorted"
                     :isCurrent="current && player.name === current.name"
                     :isTakeover="takeover && player.name === takeover.name"
