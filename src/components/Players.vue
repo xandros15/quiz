@@ -10,6 +10,9 @@
                     :index="index"
             />
         </ol>
+        <div v-if="top.length > 1" class="top">
+            <h3 v-for="player in top">#{{player.place}} {{player.name}}</h3>
+        </div>
         <Order v-if="players.length > 1" class="order"/>
         <div v-if="players.length > 0" class="answer">
             <Btn color="blue" @click="pass">pass</Btn>
@@ -92,6 +95,9 @@
     .new-player {
         grid-area: new-player;
     }
+    .top {
+        grid-area: top;
+    }
     #app {
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
@@ -101,11 +107,15 @@
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-template-rows: auto;
         grid-template-areas:
-        "answering answering . ."
-        "answer answer . ."
-        "order order . ."
-        "players players . ."
-        "new-player . . .";
+                "answering answering . ."
+                "answer answer . ."
+                "order order . ."
+                "players players top top"
+                "new-player . . .";
+    }
+    .top {
+        margin: 1rem 0;
+        padding-left: 1rem;
     }
     .panel {
         margin-bottom: 1rem;
